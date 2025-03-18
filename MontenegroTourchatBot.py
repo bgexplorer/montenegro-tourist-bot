@@ -2,6 +2,7 @@ import telebot  # Biblioteka za rad sa Telegram botom
 import os  # Modul za rad sa sistemskim varijablama
 import pandas as pd  # Biblioteka za rad sa tabelarnim podacima
 from difflib import get_close_matches  # Funkcija za pronalaženje sličnih reči
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton  # Biblioteka za inline dugmiće
 
 # Učitajmo bazu podataka sa pitanjima i odgovorima u obliku rečnika
 data = {
@@ -54,6 +55,31 @@ def find_best_answer(question):
         return answer
     else:
         return "Nažalost, nemam odgovor na to pitanje. Molim vas pokušajte sa drugačijim formulacijom."
+
+# Funkcija za prikaz interaktivnog menija
+@bot.message_handler(commands=['menu'])
+def send_menu(message):
+    markup = InlineKeyboardMarkup()
+    btn1 = InlineKeyboardButton("Top 5 plaža", callback_data="plaze")
+    btn2 = InlineKeyboardButton("Top znamenitosti", callback_data="znamenitosti")
+    btn3 = InlineKeyboardButton("Kontakt taksi", callback_data="taksi")
+    btn4 = InlineKeyboardButton("Vremenska prognoza", callback_data="vreme")
+    
+    markup.add(btn1, btn2)
+    markup.add(btn3, btn4)
+    
+    bot.send_message(message.chat.id, "Izaberite opciju:", reply_markup=markup)
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_query(call):
+    if call.data == "plaze":
+        bot.send_message(call.message.chat.id, "Najpoznatije plaže su: Jaz, Mogren, Bečići, Drobni Pijesak i Plavi Horizonti.")
+    elif call.data == "znamenitosti":
+        bot.send_message(call.message.chat.id, "Top znamenitosti: Ostrog, Kotor, Lovćen, Durmitor, Sveti Stefan.")
+    elif call.data == "taksi":
+        bot.send_message(call.message.chat.id, "Preporučeni taksiji: Red Taxi (Podgorica) +382 67 019 019, City Taxi (Budva) +382 33 19700.")
+    elif call.data == "vreme":
+        bot.send_message(call.message.chat.id, "Vremensku prognozu možete pogledati na https://meteo.co.me")
 
 # Postavljanje handlera za primanje poruka od korisnika
 @bot.message_handler(func=lambda message: True)
