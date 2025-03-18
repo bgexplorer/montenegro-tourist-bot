@@ -1,5 +1,5 @@
 import telebot  # Biblioteka za rad sa Telegram botom
-import os  # Modul za rad sa sistemskim varijablama
+import os  # Modul za rad sa sistemskim varijablima
 import pandas as pd  # Biblioteka za rad sa tabelarnim podacima
 from difflib import get_close_matches  # Funkcija za pronalaženje sličnih reči
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton  # Biblioteka za inline dugmiće
@@ -21,7 +21,11 @@ data = {
         "Koje su najbolje znamenitosti u Crnoj Gori?",
         "Kako da putujem između gradova u Crnoj Gori?",
         "Koji su najpoznatiji nacionalni parkovi?",
-        "Gde mogu da promenim novac u Podgorici?"
+        "Gde mogu da promenim novac u Podgorici?",
+        "Koje su najbolje plaže u Baru?",
+        "Koji su najbolji restorani u Baru?",
+        "Šta obići u Baru?",
+        "Kako funkcioniše gradski prevoz u Baru?"
     ],
     "Odgovor": [
         "Zvanična valuta u Crnoj Gori je euro (EUR).",
@@ -38,7 +42,11 @@ data = {
         "Najpoznatije znamenitosti su: Ostrog, Lovćen, Durmitor, Stari grad Kotor i Sveti Stefan.",
         "Možete koristiti autobuse, taksije ili rent-a-car uslugu za putovanje između gradova.",
         "Nacionalni parkovi u Crnoj Gori su: Durmitor, Biogradska gora, Skadarsko jezero, Lovćen i Prokletije.",
-        "Novac možete promeniti u menjačnicama u tržnim centrima ili na aerodromu."
+        "Novac možete promeniti u menjačnicama u tržnim centrima ili na aerodromu.",
+        "Najpoznatije plaže u Baru su: Veliki Pijesak, Crvena Plaža, Sutomore, Maljevik i Utjeha.",
+        "Najbolji restorani u Baru su: Restoran Kalamper, Knjaževa Bašta, Le Petit Bistro i Konoba Spilja.",
+        "U Baru možete posetiti Stari grad Bar, tvrđavu Haj Nehaj, Skadarsko jezero i maslinjake Stare Masline.",
+        "Gradski prevoz u Baru se sastoji uglavnom od lokalnih autobusa koji povezuju Sutomore, Utjehu i centar grada. Takođe su dostupni i taksiji po pristupačnim cenama."
     ]
 }
 faq_df = pd.DataFrame(data)  # Konvertujemo podatke u Pandas DataFrame radi lakše pretrage
@@ -55,31 +63,6 @@ def find_best_answer(question):
         return answer
     else:
         return "Nažalost, nemam odgovor na to pitanje. Molim vas pokušajte sa drugačijim formulacijom."
-
-# Funkcija za prikaz interaktivnog menija
-@bot.message_handler(commands=['menu'])
-def send_menu(message):
-    markup = InlineKeyboardMarkup()
-    btn1 = InlineKeyboardButton("Top 5 plaža", callback_data="plaze")
-    btn2 = InlineKeyboardButton("Top znamenitosti", callback_data="znamenitosti")
-    btn3 = InlineKeyboardButton("Kontakt taksi", callback_data="taksi")
-    btn4 = InlineKeyboardButton("Vremenska prognoza", callback_data="vreme")
-    
-    markup.add(btn1, btn2)
-    markup.add(btn3, btn4)
-    
-    bot.send_message(message.chat.id, "Izaberite opciju:", reply_markup=markup)
-
-@bot.callback_query_handler(func=lambda call: True)
-def callback_query(call):
-    if call.data == "plaze":
-        bot.send_message(call.message.chat.id, "Najpoznatije plaže su: Jaz, Mogren, Bečići, Drobni Pijesak i Plavi Horizonti.")
-    elif call.data == "znamenitosti":
-        bot.send_message(call.message.chat.id, "Top znamenitosti: Ostrog, Kotor, Lovćen, Durmitor, Sveti Stefan.")
-    elif call.data == "taksi":
-        bot.send_message(call.message.chat.id, "Preporučeni taksiji: Red Taxi (Podgorica) +382 67 019 019, City Taxi (Budva) +382 33 19700.")
-    elif call.data == "vreme":
-        bot.send_message(call.message.chat.id, "Vremensku prognozu možete pogledati na https://meteo.co.me")
 
 # Postavljanje handlera za primanje poruka od korisnika
 @bot.message_handler(func=lambda message: True)
