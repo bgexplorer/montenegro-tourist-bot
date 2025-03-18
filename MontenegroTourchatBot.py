@@ -1,9 +1,9 @@
-import telebot
-import os
-import pandas as pd
-from difflib import get_close_matches
+import telebot  # Biblioteka za rad sa Telegram botom
+import os  # Modul za rad sa sistemskim varijablama
+import pandas as pd  # Biblioteka za rad sa tabelarnim podacima
+from difflib import get_close_matches  # Funkcija za pronalaženje sličnih reči
 
-# Učitajmo bazu podataka sa pitanjima i odgovorima
+# Učitajmo bazu podataka sa pitanjima i odgovorima u obliku rečnika
 data = {
     "Pitanje": [
         "Koja je valuta u Crnoj Gori?",
@@ -15,7 +15,12 @@ data = {
         "Gde se nalaze nacionalni parkovi u Crnoj Gori?",
         "Da li je potrebna viza za ulazak u Crnu Goru?",
         "Koji su brojevi za hitne službe u Crnoj Gori?",
-        "Gde mogu da pronađem informacije o vremenskoj prognozi?"
+        "Gde mogu da pronađem informacije o vremenskoj prognozi?",
+        "Koliko košta taxi u Crnoj Gori?",
+        "Koje su najbolje znamenitosti u Crnoj Gori?",
+        "Kako da putujem između gradova u Crnoj Gori?",
+        "Koji su najpoznatiji nacionalni parkovi?",
+        "Gde mogu da promenim novac u Podgorici?"
     ],
     "Odgovor": [
         "Zvanična valuta u Crnoj Gori je euro (EUR).",
@@ -27,31 +32,36 @@ data = {
         "Najpoznatiji nacionalni parkovi su Durmitor, Biogradska Gora, Skadarsko jezero, Lovćen i Prokletije.",
         "Građani EU, SAD, Srbije i većine zemalja Balkana ne trebaju vizu za boravak do 90 dana.",
         "Brojevi hitnih službi u Crnoj Gori su: Policija - 122, Hitna pomoć - 124, Vatrogasci - 123.",
-        "Vremensku prognozu možete pratiti na sajtu meteo.co.me ili putem aplikacija AccuWeather i Windy."
+        "Vremensku prognozu možete pratiti na sajtu meteo.co.me ili putem aplikacija AccuWeather i Windy.",
+        "Start taksimetra u većini gradova je oko 1€, dok je cena po kilometru od 0.50€ do 1€.",
+        "Najpoznatije znamenitosti su: Ostrog, Lovćen, Durmitor, Stari grad Kotor i Sveti Stefan.",
+        "Možete koristiti autobuse, taksije ili rent-a-car uslugu za putovanje između gradova.",
+        "Nacionalni parkovi u Crnoj Gori su: Durmitor, Biogradska gora, Skadarsko jezero, Lovćen i Prokletije.",
+        "Novac možete promeniti u menjačnicama u tržnim centrima ili na aerodromu."
     ]
 }
-faq_df = pd.DataFrame(data)
+faq_df = pd.DataFrame(data)  # Konvertujemo podatke u Pandas DataFrame radi lakše pretrage
 
 # Inicijalizacija Telegram bota
-TOKEN = "8159628381:AAEUWt59cKCPR_DUZ1AuesR5bGw7ndfLXOM"  # Ovde unesi svoj API token iz BotFather-a
-bot = telebot.TeleBot(TOKEN)
+TOKEN = "OVDE_UNESI_SVOJ_TOKEN"  # Ovde unesi svoj API token iz BotFather-a
+bot = telebot.TeleBot(TOKEN)  # Kreiramo bot instancu
 
-# Funkcija za pretragu najboljeg odgovora
+# Funkcija za pretragu najboljeg odgovora koristeći sličnost pitanja
 def find_best_answer(question):
-    matches = get_close_matches(question, faq_df["Pitanje"], n=1, cutoff=0.5)
+    matches = get_close_matches(question, faq_df["Pitanje"], n=1, cutoff=0.5)  # Pronalaženje najbližeg pitanja u bazi
     if matches:
-        answer = faq_df[faq_df["Pitanje"] == matches[0]]["Odgovor"].values[0]
+        answer = faq_df[faq_df["Pitanje"] == matches[0]]["Odgovor"].values[0]  # Vraćamo odgovarajući odgovor
         return answer
     else:
         return "Nažalost, nemam odgovor na to pitanje. Molim vas pokušajte sa drugačijim formulacijom."
 
-# Postavljanje handlera za primanje poruka
+# Postavljanje handlera za primanje poruka od korisnika
 @bot.message_handler(func=lambda message: True)
 def respond_to_message(message):
-    user_question = message.text
-    answer = find_best_answer(user_question)
-    bot.reply_to(message, answer)
+    user_question = message.text  # Uzimamo korisničku poruku
+    answer = find_best_answer(user_question)  # Pretražujemo najbolji odgovor
+    bot.reply_to(message, answer)  # Šaljemo odgovor korisniku
 
 # Pokretanje bota
-print("Bot je pokrenut...")
-bot.polling()
+print("Bot je pokrenut...")  # Štampamo poruku kada se bot pokrene
+bot.polling()  # Pokrećemo kontinuirano osluškivanje poruka
