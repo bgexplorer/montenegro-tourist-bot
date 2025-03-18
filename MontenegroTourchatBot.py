@@ -44,7 +44,7 @@ data = {
 faq_df = pd.DataFrame(data)  # Konvertujemo podatke u Pandas DataFrame radi lakše pretrage
 
 # Inicijalizacija Telegram bota
-TOKEN = "OVDE_UNESI_SVOJ_TOKEN"  # Ovde unesi svoj API token iz BotFather-a
+TOKEN = os.getenv("TELEGRAM_API_TOKEN")  # Povlačimo API token iz okruženja
 bot = telebot.TeleBot(TOKEN)  # Kreiramo bot instancu
 
 # Funkcija za pretragu najboljeg odgovora koristeći sličnost pitanja
