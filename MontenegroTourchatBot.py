@@ -55,3 +55,4 @@ def respond_to_message(message):
 # Pokretanje bota
 print("Bot je pokrenut...")
 bot.polling()
+# Ova izmena je samo da Railway povuče novi kod
