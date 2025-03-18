@@ -56,3 +56,18 @@ def respond_to_message(message):
 print("Bot je pokrenut...")
 bot.polling()
 # Ova izmena je samo da Railway povuče novi kod
+import threading
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Montenegro Tourist Bot is running!"
+
+def run_server():
+    app.run(host="0.0.0.0", port=10000)  # Pokreće dummy server na portu 10000
+
+# Pokretanje Flask servera u posebnoj niti (thread)
+server_thread = threading.Thread(target=run_server)
+server_thread.start()
