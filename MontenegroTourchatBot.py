@@ -78,7 +78,7 @@ def find_best_answer(question):
 def respond_to_message(message):
     user_question = message.text  # Uzimamo korisničku poruku
     answer = find_best_answer(user_question)  # Pretražujemo najbolji odgovor
-    bot.reply_to(message, answer)  # Šaljemo odgovor korisniku
+    bot.send_message(message.chat.id, answer)  # direktna poruka
 
 # Pokretanje bota
 # Dummy server da Render zna da je aplikacija aktivna
