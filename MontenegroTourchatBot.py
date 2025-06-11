@@ -75,3 +75,19 @@ def respond_to_message(message):
 print("Bot je pokrenut...")  # Štampamo poruku kada se bot pokrene
 bot.polling()  # Pokrećemo kontinuirano osluškivanje poruka
 
+# Dummy server da Render zna da je aplikacija aktivna
+from flask import Flask
+import threading
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Montenegro Tourist Bot is running!"
+
+def run_flask():
+    app.run(host="0.0.0.0", port=10000)
+
+# Pokreni Flask server u posebnoj niti
+flask_thread = threading.Thread(target=run_flask)
+flask_thread.start()
