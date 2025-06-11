@@ -74,6 +74,4 @@ def respond_to_message(message):
 # Pokretanje bota
 print("Bot je pokrenut...")  # Štampamo poruku kada se bot pokrene
 bot.polling()  # Pokrećemo kontinuirano osluškivanje poruka
-git add MontenegroTourchatBot.py
-git commit -m "Added Flask dummy server for Render"
-git push origin main
+
