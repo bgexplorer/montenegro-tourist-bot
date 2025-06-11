@@ -57,12 +57,21 @@ bot = telebot.TeleBot(TOKEN)  # Kreiramo bot instancu
 
 # Funkcija za pretragu najboljeg odgovora koristeći sličnost pitanja
 def find_best_answer(question):
-    matches = get_close_matches(question, faq_df["Pitanje"], n=1, cutoff=0.5)  # Pronalaženje najbližeg pitanja u bazi
+    normalized = question.lower().strip()
+
+    # Pozdravi koji imaju direktan odgovor
+    greetings = ["zdravo", "dobar dan", "ćao", "pozdrav", "hello", "hi", "hej"]
+
+    if any(greet in normalized for greet in greetings):
+        return "Zdravo! Kako vam mogu pomoći u vezi sa turizmom u Crnoj Gori? 😊"
+
+    matches = get_close_matches(question, faq_df["Pitanje"], n=1, cutoff=0.5)
     if matches:
-        answer = faq_df[faq_df["Pitanje"] == matches[0]]["Odgovor"].values[0]  # Vraćamo odgovarajući odgovor
+        answer = faq_df[faq_df["Pitanje"] == matches[0]]["Odgovor"].values[0]
         return answer
     else:
         return "Nažalost, nemam odgovor na to pitanje. Molim vas pokušajte sa drugačijim formulacijom."
+
 
 # Postavljanje handlera za primanje poruka od korisnika
 @bot.message_handler(func=lambda message: True)
