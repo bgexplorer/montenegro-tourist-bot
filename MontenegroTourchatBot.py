@@ -88,6 +88,11 @@ def home():
 def run_flask():
     app.run(host="0.0.0.0", port=10000)
 
-# Pokreni Flask server u posebnoj niti
+# Pokreni Flask server u posebnoj niti PRE nego što startuješ bota
 flask_thread = threading.Thread(target=run_flask)
 flask_thread.start()
+
+# Pokretanje bota
+print("Bot je pokrenut...")  # Štampamo poruku kada se bot pokrene
+bot.polling()  # Pokrećemo kontinuirano osluškivanje poruka
+
