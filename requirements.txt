@@ -1,3 +1,7 @@
 pyTelegramBotAPI
 pandas
 flask
+
+
+
+Added Flask to requirements
