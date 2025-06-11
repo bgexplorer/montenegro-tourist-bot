@@ -72,9 +72,6 @@ def respond_to_message(message):
     bot.reply_to(message, answer)  # Šaljemo odgovor korisniku
 
 # Pokretanje bota
-print("Bot je pokrenut...")  # Štampamo poruku kada se bot pokrene
-bot.polling()  # Pokrećemo kontinuirano osluškivanje poruka
-
 # Dummy server da Render zna da je aplikacija aktivna
 from flask import Flask
 import threading
@@ -95,4 +92,5 @@ flask_thread.start()
 # Pokretanje bota
 print("Bot je pokrenut...")  # Štampamo poruku kada se bot pokrene
 bot.polling()  # Pokrećemo kontinuirano osluškivanje poruka
+
 
